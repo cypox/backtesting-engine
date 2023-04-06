@@ -50,24 +50,7 @@ class Strategy:
         print(f"trades by ticker: {self.trades_per_stock}")
 
     def process(self, input_data):
-        self.days += 1
-        for ticker in tickers:
-            average = input_data[ticker][0:HISTORY].sum() / HISTORY
-            current_price = input_data[ticker][HISTORY]
-            if average == 0 or current_price == 'NaN':
-                continue
-            pct = (current_price - average) / average
-            qtty = 0
-            if pct > 0.2:
-                qtty = -10
-            elif pct > 0.1:
-                qtty = -2
-            elif pct < -0.1:
-                qtty = 2
-            elif pct < -0.2:
-                qtty = 10
-            if qtty != 0:
-                self.order(ticker, qtty, current_price)
+        pass
 
     def order(self, ticker, qtty, unit_price):
         if qtty > 0: # buy
@@ -92,10 +75,88 @@ class Strategy:
             self.held_stocks_cost[ticker] -= average_ticker_buy_price * actual_qtty
             print(f"sold {actual_qtty} units of {ticker} @ {unit_price} and current balance is ${self.balance}")
 
-bot = Strategy()
+class SMAStrategy(Strategy):
+    def __init__(self):
+        Strategy.__init__(self)
+    
+    def process(self, input_data):
+        self.days += 1
+        for ticker in tickers:
+            average = input_data[ticker][0:HISTORY].sum() / HISTORY
+            current_price = input_data[ticker][HISTORY]
+            if average == 0 or current_price == 'NaN':
+                continue
+            pct = (current_price - average) / average
+            qtty = 0
+            if pct > 0.2:
+                qtty = -10
+            elif pct > 0.1:
+                qtty = -2
+            elif pct < -0.1:
+                qtty = 2
+            elif pct < -0.2:
+                qtty = 10
+            if qtty != 0:
+                self.order(ticker, qtty, current_price)
+
+class SMAAggressiveStrategy(Strategy):
+    def __init__(self):
+        Strategy.__init__(self)
+    
+    def process(self, input_data):
+        self.days += 1
+        for ticker in tickers:
+            average = input_data[ticker][0:HISTORY].sum() / HISTORY
+            current_price = input_data[ticker][HISTORY]
+            if average == 0 or current_price == 'NaN':
+                continue
+            pct = (current_price - average) / average
+            qtty = 0
+            if pct > 0.1:
+                qtty = -10
+            elif pct > 0.05:
+                qtty = -2
+            elif pct < -0.05:
+                qtty = 2
+            elif pct < -0.1:
+                qtty = 10
+            if qtty != 0:
+                self.order(ticker, qtty, current_price)
+
+class SMAHodlStrategy(Strategy):
+    def __init__(self):
+        Strategy.__init__(self)
+    
+    def process(self, input_data):
+        self.days += 1
+        for ticker in tickers:
+            average = input_data[ticker][0:HISTORY].sum() / HISTORY
+            current_price = input_data[ticker][HISTORY]
+            if average == 0 or current_price == 'NaN':
+                continue
+            pct = (current_price - average) / average
+            qtty = 0
+            if pct > 0.3:
+                qtty = -10
+            elif pct > 0.2:
+                qtty = -2
+            elif pct < -0.05:
+                qtty = 2
+            elif pct < -0.1:
+                qtty = 10
+            if qtty != 0:
+                self.order(ticker, qtty, current_price)
+
+bot1 = SMAStrategy()
+bot2 = SMAAggressiveStrategy()
+bot3 = SMAHodlStrategy()
 
 for i in range(n-HISTORY-1):
     input_data = data[i:i+HISTORY+1]
-    bot.process(input_data)
+    bot1.process(input_data)
+    bot2.process(input_data)
+    bot3.process(input_data)
 
-bot.net_worth(data.iloc[n-1])
+bot1.net_worth(data.iloc[n-1])
+bot2.net_worth(data.iloc[n-1])
+bot3.net_worth(data.iloc[n-1])
