@@ -53,8 +53,8 @@ class Strategy:
             print(f"sold {actual_qtty} units of {ticker} @ {unit_price} and current balance is ${self.balance}")
 
 class SMAStrategy(Strategy):
-    def __init__(self):
-        Strategy.__init__(self)
+    def __init__(self, tickers, history):
+        Strategy.__init__(self, tickers, history)
     
     def process(self, input_data):
         self.days += 1
@@ -77,8 +77,8 @@ class SMAStrategy(Strategy):
                 self.order(ticker, qtty, current_price)
 
 class SMAAggressiveStrategy(Strategy):
-    def __init__(self):
-        Strategy.__init__(self)
+    def __init__(self, tickers, history):
+        Strategy.__init__(self, tickers, history)
     
     def process(self, input_data):
         self.days += 1
@@ -101,8 +101,8 @@ class SMAAggressiveStrategy(Strategy):
                 self.order(ticker, qtty, current_price)
 
 class SMAHodlStrategy(Strategy):
-    def __init__(self):
-        Strategy.__init__(self)
+    def __init__(self, tickers, history):
+        Strategy.__init__(self, tickers, history)
     
     def process(self, input_data):
         self.days += 1
@@ -125,8 +125,8 @@ class SMAHodlStrategy(Strategy):
                 self.order(ticker, qtty, current_price)
 
 class TendencyStrategy(Strategy):
-    def __init__(self):
-        Strategy.__init__(self)
+    def __init__(self, tickers, history):
+        Strategy.__init__(self, tickers, history)
     
     def process(self, input_data):
         self.days += 1

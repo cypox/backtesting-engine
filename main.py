@@ -27,10 +27,10 @@ FEE = 1
 n = len(data)
 t = len(tickers)
 
-bot1 = SMAStrategy()
-bot2 = SMAAggressiveStrategy()
-bot3 = SMAHodlStrategy()
-bot4 = TendencyStrategy()
+bot1 = SMAStrategy(tickers, HISTORY)
+bot2 = SMAAggressiveStrategy(tickers, HISTORY)
+bot3 = SMAHodlStrategy(tickers, HISTORY)
+bot4 = TendencyStrategy(tickers, HISTORY)
 
 for i in range(n-HISTORY-1):
     input_data = data[i:i+HISTORY+1]
