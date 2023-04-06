@@ -35,14 +35,15 @@ class Strategy:
         self.days = 0
     
     def net_worth(self, stock_prices):
-        net_worth = self.balance - 1000
+        net_worth = self.balance
         net_worth += sum([self.held_stocks[t] * stock_prices[t] for t in tickers])
         print(f"net worth: ${net_worth:0.0f}, liquidity: ${self.balance:0.0f}")
-        print(f"estimated returns: ${(net_worth/self.days):.2f} per day")
+        net_earnings = net_worth - INITIAL_BALANCE
+        print(f"estimated returns: ${(net_earnings/self.days):.2f} per day")
         trades = sum(self.trades_per_stock.values())
         print(f"realised {trades} trades")
         print(f"realised {(trades/self.days):.2f} trades per day")
-        print(f"returns by trade: ${(net_worth/trades):.2f} per trade")
+        print(f"returns by trade: ${(net_earnings/trades):.2f} per trade")
         print(f"current portfolio: {self.held_stocks}")
         print(f"cost of held stocks: {self.held_stocks_cost}")
         print(f"returns by ticker: {self.returns_by_stock}")
