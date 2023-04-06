@@ -147,16 +147,39 @@ class SMAHodlStrategy(Strategy):
             if qtty != 0:
                 self.order(ticker, qtty, current_price)
 
+class TendencyStrategy(Strategy):
+    def __init__(self):
+        Strategy.__init__(self)
+    
+    def process(self, input_data):
+        self.days += 1
+        for ticker in tickers:
+            price_m2 = input_data[ticker][-3]
+            price_m1 = input_data[ticker][-2]
+            price_m0 = input_data[ticker][-1]
+            qtty = 0
+            if price_m0 > price_m1 and price_m1 > price_m2:
+                qtty = 5
+            elif price_m0 > price_m1:
+                qtty = 1
+            elif price_m0 < price_m1 and price_m1 < price_m2:
+                qtty = -2
+            if qtty != 0:
+                self.order(ticker, qtty, price_m0)
+
 bot1 = SMAStrategy()
 bot2 = SMAAggressiveStrategy()
 bot3 = SMAHodlStrategy()
+bot4 = TendencyStrategy()
 
 for i in range(n-HISTORY-1):
     input_data = data[i:i+HISTORY+1]
     bot1.process(input_data)
     bot2.process(input_data)
     bot3.process(input_data)
+    bot4.process(input_data)
 
 bot1.net_worth(data.iloc[n-1])
 bot2.net_worth(data.iloc[n-1])
 bot3.net_worth(data.iloc[n-1])
+bot4.net_worth(data.iloc[n-1])
