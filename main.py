@@ -8,7 +8,7 @@ from strategy import *
 tickers = ['MSFT', 'TSLA', 'AAPL', 'NVDA', 'NIO', 'AMD', 'GME', 'AMC', 'NFLX', 'META']
 
 today = date.today()
-start_date= "2005-01-01"
+start_date= "2015-01-01"
 end_date="2020-11-19"
 
 data = None
@@ -27,19 +27,19 @@ FEE = 1
 n = len(data)
 t = len(tickers)
 
-bot1 = SMAStrategy(tickers, HISTORY)
-bot2 = SMAAggressiveStrategy(tickers, HISTORY)
-bot3 = SMAHodlStrategy(tickers, HISTORY)
-bot4 = TendencyStrategy(tickers, HISTORY)
+bots = [
+    SMAStrategy(tickers, HISTORY),
+    SMAAggressiveStrategy(tickers, HISTORY),
+    SMAHodlStrategy(tickers, HISTORY),
+    TendencyStrategy(tickers, HISTORY),
+    MeanReversionStrategy(tickers, HISTORY),
+    RandomStrategy(tickers, HISTORY)
+    ]
 
 for i in range(n-HISTORY-1):
     input_data = data[i:i+HISTORY+1]
-    bot1.process(input_data)
-    bot2.process(input_data)
-    bot3.process(input_data)
-    bot4.process(input_data)
+    for b in bots:
+        b.process(input_data)
 
-bot1.net_worth(data.iloc[n-1])
-bot2.net_worth(data.iloc[n-1])
-bot3.net_worth(data.iloc[n-1])
-bot4.net_worth(data.iloc[n-1])
+for b in bots:
+    b.net_worth(data.iloc[n-1])

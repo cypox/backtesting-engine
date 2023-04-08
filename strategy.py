@@ -143,3 +143,34 @@ class TendencyStrategy(Strategy):
                 qtty = -2
             if qtty != 0:
                 self.order(ticker, qtty, price_m0)
+
+class MeanReversionStrategy(Strategy):
+    def __init__(self, tickers, history):
+        Strategy.__init__(self, tickers, history)
+    
+    def process(self, input_data):
+        self.days += 1
+        for ticker in self.tickers:
+            price_m2 = input_data[ticker][-3]
+            price_m1 = input_data[ticker][-2]
+            price_m0 = input_data[ticker][-1]
+            qtty = 0
+            if price_m0 < price_m1 and price_m1 < price_m2:
+                qtty = 5
+            elif price_m0 > price_m1 and price_m1 > price_m2:
+                qtty = -5
+            if qtty != 0:
+                self.order(ticker, qtty, price_m0)
+
+class RandomStrategy(Strategy):
+    def __init__(self, tickers, history):
+        Strategy.__init__(self, tickers, history)
+    
+    def process(self, input_data):
+        import numpy as np
+        self.days += 1
+        for ticker in self.tickers:
+            qtty = int(np.random.normal(0, 1, 1)[0])
+            price_m0 = input_data[ticker][-1]
+            if qtty != 0 and not np.isnan(price_m0):
+                self.order(ticker, qtty, price_m0)
