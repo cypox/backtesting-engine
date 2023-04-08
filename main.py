@@ -8,12 +8,13 @@ from strategy import *
 tickers = ['MSFT', 'TSLA', 'AAPL', 'NVDA', 'NIO', 'AMD', 'GME', 'AMC', 'NFLX', 'META']
 
 today = date.today()
-start_date= "2015-01-01"
-end_date="2020-11-19"
+#start_date= "2015-01-01"
+#end_date="2020-11-19"
 
 data = None
 for ticker in tickers:
-    df = yf.download(ticker, start=start_date, end=today)
+    #df = yf.download(ticker, start=start_date, end=today)
+    df = yf.download(ticker, period='7d', interval='1m')
     df = df.rename(columns={"Adj Close": ticker})
     if data is None:
         data = df
