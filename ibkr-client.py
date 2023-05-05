@@ -93,14 +93,14 @@ def main():
     eurusd_contract.currency = 'USD'
 
     #Request historical candles
-    app.reqHistoricalData(1, eurusd_contract, '', '2 D', '1 min', 'BID', 0, 2, False, [])
+    app.reqHistoricalData(1, eurusd_contract, '', '5 D', '1 min', 'BID', 0, 2, False, [])
     time.sleep(2)
 
     df = pd.DataFrame(app.data, columns=['DateTime', 'Close'])
     df['DateTime'] = pd.to_datetime(df['DateTime'], unit='s')
     df['20SMA'] = df['Close'].rolling(20).mean()
     print(df.tail(10))
-    df.to_csv('EURUSD_Hourly.csv')
+    df.to_csv('EURUSD_Minute.csv')
     df.plot()
 
     #Create order object
