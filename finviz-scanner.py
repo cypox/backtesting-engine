@@ -58,7 +58,7 @@ for ticker in (pbar := tqdm(sav_set)):
             elif p.has_attr("class") and p["class"][0] == "snapshot-td2":
                 finviz_data[key] = p.string
 
-        pickle.dump(finviz_data, open("findata/{ticker}-info.pkl", "wb"))
+        pickle.dump(finviz_data, open(f"findata/{ticker}-info.pkl", "wb"))
 
     except ValueError:
         pass
