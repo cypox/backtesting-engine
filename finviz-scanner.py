@@ -7,7 +7,7 @@ from bs4 import BeautifulSoup
 import pickle
 import sys
 
-sys.setrecursionlimit(20000) # for pickling
+sys.setrecursionlimit(50000) # for pickling
 
 
 df1 = pd.DataFrame( si.tickers_sp500() )
